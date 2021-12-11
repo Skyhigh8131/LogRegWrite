@@ -51,7 +51,7 @@ public class LogInActivity extends AppCompatActivity
                     {
                         if(task.isSuccessful()) {
                             //로그인 성공!!
-                            Intent intent = new Intent(LogInActivity.this, MainActivity.class);
+                            Intent intent = new Intent(LogInActivity.this, RecyclerviewActivity.class);
                             startActivity(intent);
                             finish();
                         }else {
