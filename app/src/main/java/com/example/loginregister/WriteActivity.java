@@ -1,5 +1,7 @@
 package com.example.loginregister;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,20 +12,16 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class WriteActivity extends AppCompatActivity implements PostViewListener{
-    private ArrayList<Post> postArrayList = new ArrayList<Post>();
+    public static ArrayList<Post> postArr = new ArrayList<Post>();
     private PostAdapter postAdapter = null;
-    public static int i = 2;
+    //public int i = 0;
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -166,10 +164,10 @@ public class WriteActivity extends AppCompatActivity implements PostViewListener
 
             long now = System.currentTimeMillis();
             Date date = new Date(now);
-            SimpleDateFormat simpledate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat simpledate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String getTime = simpledate.format(date);
 
-            post.setPostId("post_" + i++);
+            post.setPostId("post_" + postArr.size());
             post.setPostTitle(postTitle.getText().toString());
             post.setPostMenu(menuSpinner.getSelectedItem().toString());
             post.setPostEatLocation(locationSpinner.getSelectedItem().toString());
@@ -178,10 +176,17 @@ public class WriteActivity extends AppCompatActivity implements PostViewListener
             post.setPostContents(postContents.getText().toString());
             post.setPostWrittenDate(getTime);
 
-            postArrayList.add(post);
+            boolean test = postArr.add(post);
+            if(test == true){
+                Toast.makeText(this,"어레이리스트에 성공적으로 할당되었습니다." + postArr.size(),Toast.LENGTH_SHORT).show();
+
+            }
+            else{
+                Toast.makeText(this,"어레이리스트에 할당하지 못했습니다." + postArr.size(),Toast.LENGTH_SHORT).show();
+            }
+
             databaseReference.child("게시물").push().setValue(post);
         }
-
     }
 
     public void onBackPressed(){
